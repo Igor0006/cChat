@@ -14,8 +14,8 @@ public class SenderService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(Message message, Long reciever_id) {
+    public void sendMessage(Message message, String reciever_id) {
         log.info("Message from {} was sent to {}", message.sender(), reciever_id);
-        kafkaTemplate.send("messages", message);
+        kafkaTemplate.send("messages", reciever_id, message);
     }
 }

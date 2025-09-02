@@ -1,6 +1,7 @@
 package com.cchat.ingress_service;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,7 @@ public class Controller {
     }
 
     @PostMapping("send/{reciever_id}")
-    public void postMethodName(@RequestBody Message message, @RequestParam Long reciever_id) {
+    public void postMethodName(@RequestBody Message message, @PathVariable String reciever_id) {
         senderService.sendMessage(message, reciever_id);
     }
     

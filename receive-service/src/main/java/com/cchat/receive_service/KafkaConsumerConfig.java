@@ -23,7 +23,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, Message> consumerFactory(ObjectMapper objectMapper) {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "mygroup");
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "reciever");
         JsonDeserializer deserializer = new JsonDeserializer<>(Message.class, objectMapper);
         return new DefaultKafkaConsumerFactory<>(properties, new StringDeserializer() ,deserializer);
     }
