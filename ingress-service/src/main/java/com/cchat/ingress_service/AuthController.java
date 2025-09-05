@@ -33,7 +33,7 @@ public class AuthController {
                 || req.password() == null || req.password().length() < 4) {
             return ResponseEntity.badRequest().body("invalid username or password");
         }
-        Optional<User> existing = users.findByUsername(req.username());
+        Optional<User> existing = users.findByLogin(req.username());
         if (existing.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("username already taken");
         }
@@ -49,7 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
-        User u = users.findByUsername(req.username())
+        User u = users.findByLogin(req.username())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         if (!pe.matches(req.password(), u.getPassword())) {
