@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SenderService {
-    private final KafkaTemplate<String, Message> kafkaTemplate;
+    private final KafkaTemplate<String, MessageDto> kafkaTemplate;
     private final static Logger log = LoggerFactory.getLogger(SenderService.class);
 
-    public SenderService(KafkaTemplate<String, Message> kafkaTemplate) {
+    public SenderService(KafkaTemplate<String, MessageDto> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(Message message, String reciever_id) {
-        log.info("Message from {} was sent to {}", message.sender(), reciever_id);
+    public void sendMessage(MessageDto message, String reciever_id) {
+        log.info("Message from {} was sent to {}", message.getSenderId(), reciever_id);
         kafkaTemplate.send("messages", reciever_id, message);
     }
 }

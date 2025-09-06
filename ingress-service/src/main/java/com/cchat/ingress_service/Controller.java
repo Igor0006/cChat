@@ -16,7 +16,7 @@ public class Controller {
     }
 
     @PostMapping("send/{reciever_id}")
-    public void postMethodName(@RequestBody Message message, @PathVariable String reciever_id) {
+    public void postMethodName(@RequestBody MessageDto message, @PathVariable String reciever_id) {
         senderService.sendMessage(message, reciever_id);
     }
     

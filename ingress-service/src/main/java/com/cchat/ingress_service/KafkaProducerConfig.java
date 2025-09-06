@@ -19,17 +19,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class KafkaProducerConfig {
     @Bean
-    public ProducerFactory<String, Message> producerFactory(ObjectMapper mapper) {
+    public ProducerFactory<String, MessageDto> producerFactory(ObjectMapper mapper) {
         Map<String, Object> configProperties = new HashMap<>();
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        JsonSerializer<Message> serializer = new JsonSerializer<>(mapper);
+        JsonSerializer<MessageDto> serializer = new JsonSerializer<>(mapper);
         serializer.setAddTypeInfo(false);
 
         return new DefaultKafkaProducerFactory<>(configProperties, new StringSerializer(), serializer);
     }
 
     @Bean
-    public KafkaTemplate<String, Message> kafkaTemplate(ProducerFactory<String, Message> producerFactory) {
+    public KafkaTemplate<String, MessageDto> kafkaTemplate(ProducerFactory<String, MessageDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
