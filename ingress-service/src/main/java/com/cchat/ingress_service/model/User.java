@@ -1,4 +1,4 @@
-package com.cchat.ingress_service;
+package com.cchat.ingress_service.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

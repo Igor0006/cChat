@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import com.cchat.ingress_service.model.MessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
