@@ -18,8 +18,7 @@ public class Message {
     Long id;
 
     Long sender_id;
-    @ManyToOne
-    Conversation conversation;
+    Long conversation_id;
     String body;
     Instant createdAt = Instant.now();
 }
