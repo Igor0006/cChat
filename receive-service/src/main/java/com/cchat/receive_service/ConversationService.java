@@ -20,7 +20,7 @@ public class ConversationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Conversation createDmIfAbsent(Long userAId, Long userBId) {
+    public Conversation getConversationForDm(Long userAId, Long userBId) {
         var existingId = conversationRepository.findDmConversationId(userAId, userBId);
         if (existingId.isPresent()) {
             return conversationRepository.getReferenceById(existingId.get());
