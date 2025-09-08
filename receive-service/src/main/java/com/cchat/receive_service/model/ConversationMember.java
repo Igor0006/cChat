@@ -14,7 +14,8 @@ public class ConversationMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    Long conversationId;
+    @ManyToOne
+    Conversation conversation;
     @ManyToOne
     User user;
 }

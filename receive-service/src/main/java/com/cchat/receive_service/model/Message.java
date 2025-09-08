@@ -1,11 +1,11 @@
 package com.cchat.receive_service.model;
 
 import java.time.Instant;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -18,7 +18,8 @@ public class Message {
     Long id;
 
     Long sender_id;
-    Long conversation_id;
+    @ManyToOne
+    Conversation conversation;
     String body;
     Instant createdAt = Instant.now();
 }
