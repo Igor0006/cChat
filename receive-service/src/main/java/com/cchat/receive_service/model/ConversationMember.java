@@ -19,3 +19,4 @@ public class ConversationMember {
     @ManyToOne
     User user;
 }
+    

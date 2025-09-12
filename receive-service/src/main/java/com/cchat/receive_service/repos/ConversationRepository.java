@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
@@ -24,4 +25,15 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
           )
         """)
     Optional<Long> findDmConversationId(@Param("a") Long userA, @Param("b") Long userB);
+
+    @Query("""
+        select c
+        from Conversation c
+        where exists (
+          select 1 from ConversationMember m
+          where m.conversation = c and m.user.id = :userId
+        )
+        order by c.id desc
+        """)
+    List<Conversation> findConversations(@Param("userId") Long userId);
 }

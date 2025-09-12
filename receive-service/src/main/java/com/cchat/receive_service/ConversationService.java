@@ -5,11 +5,14 @@ import com.cchat.receive_service.repos.ConversationRepository;
 import com.cchat.receive_service.repos.UserRepository;
 import com.cchat.receive_service.model.*;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,12 @@ public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final ConversationMemberRepository memberRepository;
     private final UserRepository userRepository;
+
+    public List<Conversation> getConverstions(String login) {
+    Long userId = userRepository.findByLogin(login)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
+    return conversationRepository.findConversations(userId);
+}
 
     @Transactional
     public Conversation getConversationForDm(Long userAId, Long userBId) {
