@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,9 @@ public class Controller {
         return conversationService.getConverstions(jwt.getSubject());
     }
 
+    @PreAuthorize("@conversationService.canAccess(#jwt.subject, #conversation_id)")
     @GetMapping("/chat/{conversation_id}")
-    public List<Message> getChat(@PathVariable Long conversation_id) {
+    public List<Message> getChat(@PathVariable Long conversation_id, @AuthenticationPrincipal Jwt jwt) {
         return conversationService.getMessages(conversation_id);
     }
     

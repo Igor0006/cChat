@@ -8,7 +8,6 @@ import com.cchat.receive_service.model.ConversationMember;
 @Repository
 public interface ConversationMemberRepository extends JpaRepository<ConversationMember, Long> {
     boolean existsByConversation_IdAndUser_Id(Long conversationId, Long userId);
-
     @Modifying
     void deleteByConversation_IdAndUser_Id(Long conversationId, Long userId);
 }

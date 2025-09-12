@@ -6,8 +6,8 @@ import com.cchat.receive_service.repos.MessageRepository;
 import com.cchat.receive_service.repos.UserRepository;
 import com.cchat.receive_service.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ConversationService {
 
@@ -24,10 +25,18 @@ public class ConversationService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
+    public boolean canAccess(String login, Long conversationId) {
+        if (memberRepository.existsByConversation_IdAndUser_Id(conversationId, userRepository.findByLogin(login))) {
+            return true;
+        } else {
+            log.info("Access of user {} for conversation {} was denied", login, conversationId);
+            return false;
+        }
+    }
+
     public List<Conversation> getConverstions(String login) {
-        Long userId = userRepository.findByLogin(login)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
-    return conversationRepository.findConversations(userId);
+        Long userId = userRepository.findByLogin(login);
+        return conversationRepository.findConversations(userId);
     }
 
     public List<Message> getMessages(Long conversation_id) {
