@@ -11,12 +11,17 @@ import java.util.Optional;
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
 
     @Query("""
-        select cm.conversation.id
-        from ConversationMember cm
-        where cm.conversation.type = com.cchat.receive_service.model.ConversationType.DM
-          and cm.userId in (:a, :b)
-        group by cm.conversation.id
-        having count(distinct cm.userId) = 2
+        select c.id
+        from Conversation c
+        where c.type = com.cchat.receive_service.model.ConversationType.DM
+          and exists (
+            select 1 from ConversationMember m1
+            where m1.conversation = c and m1.user.id = :a
+          )
+          and exists (
+            select 1 from ConversationMember m2
+            where m2.conversation = c and m2.user.id = :b
+          )
         """)
     Optional<Long> findDmConversationId(@Param("a") Long userA, @Param("b") Long userB);
 }
