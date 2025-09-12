@@ -1,4 +1,4 @@
-package com.cchat.receive_service;
+package com.cchat.receive_service.config;
 
 
 import java.util.HashMap;

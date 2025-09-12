@@ -1,4 +1,4 @@
-package com.cchat.ingress_service;
+package com.cchat.ingress_service.config;
 
 import java.util.HashMap;
 import java.util.Map;
