@@ -9,5 +9,5 @@ public class ReceiveServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ReceiveServiceApplication.class, args);
 	}
-
+	
 }

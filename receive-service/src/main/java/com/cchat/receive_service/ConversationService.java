@@ -2,6 +2,7 @@ package com.cchat.receive_service;
 
 import com.cchat.receive_service.repos.ConversationMemberRepository;
 import com.cchat.receive_service.repos.ConversationRepository;
+import com.cchat.receive_service.repos.MessageRepository;
 import com.cchat.receive_service.repos.UserRepository;
 import com.cchat.receive_service.model.*;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,18 @@ public class ConversationService {
 
     private final ConversationRepository conversationRepository;
     private final ConversationMemberRepository memberRepository;
+    private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
     public List<Conversation> getConverstions(String login) {
-    Long userId = userRepository.findByLogin(login)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
+        Long userId = userRepository.findByLogin(login)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + login));
     return conversationRepository.findConversations(userId);
-}
+    }
+
+    public List<Message> getMessages(Long conversation_id) {
+        return messageRepository.getChatByConversationId(conversation_id);
+    }
 
     @Transactional
     public Conversation getConversationForDm(Long userAId, Long userBId) {

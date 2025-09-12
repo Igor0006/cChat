@@ -3,6 +3,7 @@ package com.cchat.receive_service;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cchat.receive_service.model.Conversation;
+import com.cchat.receive_service.model.Message;
 import com.cchat.receive_service.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -36,9 +39,14 @@ public class Controller {
         return username;
     }
     
-    @GetMapping("/chats")
-    public List<Conversation> getChats(@AuthenticationPrincipal Jwt jwt) {
+    @GetMapping("/conversations")
+    public List<Conversation> getConversations(@AuthenticationPrincipal Jwt jwt) {
         return conversationService.getConverstions(jwt.getSubject());
+    }
+
+    @GetMapping("/chat/{conversation_id}")
+    public List<Message> getChat(@PathVariable Long conversation_id) {
+        return conversationService.getMessages(conversation_id);
     }
     
 }
