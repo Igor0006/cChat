@@ -19,6 +19,7 @@ public class Conversation {
     @Enumerated(EnumType.STRING)
     private ConversationType type;
     
+    private Long ownerId;
     private String title;
     private Instant createdAt = Instant.now();
 }

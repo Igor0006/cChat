@@ -72,12 +72,14 @@ public class ConversationService {
     }
 
     @Transactional
-    public Conversation createGroup(String title, Collection<Long> memberIds) {
+    public Conversation createGroup(String title, Collection<Long> memberIds, String ownerUsername) {
         var conv = new Conversation();
         conv.setType(ConversationType.GROUP);
         conv.setTitle(title);
+        conv.setOwnerId(userRepository.findByLogin(ownerUsername));
         conv = conversationRepository.save(conv);
 
+        memberIds.add(userRepository.findByLogin(ownerUsername));
         for (Long uid : new HashSet<>(memberIds)) {
             var userRef = userRepository.getReferenceById(uid);
             var cm = new ConversationMember();
