@@ -28,12 +28,18 @@ public class ConversationService {
     public boolean canAccess(String login, Long conversationId) {
         if (memberRepository.existsByConversation_IdAndUser_Id(conversationId, userRepository.findByLogin(login))) {
             return true;
-        } else {
-            log.info("Access of user {} for conversation {} was denied", login, conversationId);
-            return false;
         }
+        log.info("Access of user {} for conversation {} was denied", login, conversationId);
+        return false;
     }
 
+    public boolean canAccessGroupEdit(String login, Long conversationId) {
+        if (conversationRepository.existsByIdAndOwnerId(conversationId, userRepository.findByLogin(login))) {
+            return true;
+        }
+        log.info("Access of user {} for conversation {} edit was denied", login, conversationId);
+        return false;
+    }
     public List<Conversation> getConverstions(String login) {
         Long userId = userRepository.findByLogin(login);
         return conversationRepository.findConversations(userId);

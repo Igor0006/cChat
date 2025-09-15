@@ -22,11 +22,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class KafkaConsumerConfig {
     @Bean
     public ConsumerFactory<String, MessageDto> consumerFactory(ObjectMapper objectMapper) {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "reciever");
-        JsonDeserializer deserializer = new JsonDeserializer<>(MessageDto.class, objectMapper);
-        return new DefaultKafkaConsumerFactory<>(properties, new StringDeserializer() ,deserializer);
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "reciever");
+
+        // ErrorHandlingDeserializer с делегатом JsonDeserializer
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                  org.springframework.kafka.support.serializer.ErrorHandlingDeserializer.class);
+        props.put(org.springframework.kafka.support.serializer.ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS,
+                  org.springframework.kafka.support.serializer.JsonDeserializer.class);
+        props.put(org.springframework.kafka.support.serializer.JsonDeserializer.VALUE_DEFAULT_TYPE,
+                  "com.cchat.receive_service.model.MessageDto");
+        props.put(org.springframework.kafka.support.serializer.JsonDeserializer.TRUSTED_PACKAGES,
+                  "com.cchat.receive_service.*");
+        return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean

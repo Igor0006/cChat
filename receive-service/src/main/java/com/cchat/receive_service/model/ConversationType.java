@@ -12,8 +12,16 @@ public enum ConversationType {
 
     @JsonCreator
     public static ConversationType from(String value) {
-        if (value == null) return null;
-        return ConversationType.valueOf(value.trim().toUpperCase());
+        if (value == null) throw new IllegalArgumentException("ConversationType is null");
+        String v = value.trim().toUpperCase();
+        switch (v) {
+            case "DM":
+                return DM;
+            case "GROUP":
+                return GROUP;
+            default:
+                throw new IllegalArgumentException("Unknown ConversationType: " + value);
+        }
     }
 
     @JsonValue

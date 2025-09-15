@@ -30,9 +30,26 @@ public class Controller {
     private final ConversationService conversationService;
     
     @PostMapping("/createGroup/{groupName}")
-    public void postMethodName(@PathVariable String groupName, @RequestBody List<Long> userIds, @AuthenticationPrincipal Jwt jwt) {        
+    public void createGroup(@PathVariable String groupName, @RequestBody List<Long> userIds, @AuthenticationPrincipal Jwt jwt) {        
         conversationService.createGroup(groupName, userIds, jwt.getSubject());
     }
+
+    private record MemberDto(Long conversationId, Long userId) {}
+
+    @PreAuthorize("@conversationService.canAccessGroupEdit(#jwt.subject, #memberDto.conversationId)")
+    @PostMapping("/addMember")
+    public void addGroupMember(@RequestBody MemberDto memberDto,
+                               @AuthenticationPrincipal Jwt jwt) {
+        conversationService.addMember(memberDto.conversationId, memberDto.userId);
+    }
+
+    @PreAuthorize("@conversationService.canAccessGroupEdit(#jwt.subject, #memberDto.conversationId)")
+    @PostMapping("/removeMember")
+    public void removeGroupMember(@RequestBody MemberDto memberDto,
+                                  @AuthenticationPrincipal Jwt jwt) {
+        conversationService.removeMember(memberDto.conversationId, memberDto.userId);
+    }
+    
 
     @GetMapping("/me")
     public String getMe(@AuthenticationPrincipal Jwt jwt) {

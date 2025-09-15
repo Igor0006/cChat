@@ -36,4 +36,6 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
         order by c.id desc
         """)
     List<Conversation> findConversations(@Param("userId") Long userId);
+
+    boolean existsByIdAndOwnerId(Long conversationId, Long ownerId);
 }
