@@ -1,4 +1,4 @@
-package com.cchat.receive_service;
+package com.cchat.receive_service.services;
 
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;

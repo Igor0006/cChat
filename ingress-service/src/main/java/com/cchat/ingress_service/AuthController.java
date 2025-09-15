@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.cchat.ingress_service.model.User;
+import com.cchat.ingress_service.services.JwtService;
 
 
 @RestController

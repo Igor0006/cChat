@@ -1,4 +1,4 @@
-package com.cchat.ingress_service;
+package com.cchat.ingress_service.services;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

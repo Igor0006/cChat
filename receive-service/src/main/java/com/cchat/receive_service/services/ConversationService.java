@@ -1,4 +1,4 @@
-package com.cchat.receive_service;
+package com.cchat.receive_service.services;
 
 import com.cchat.receive_service.repos.ConversationMemberRepository;
 import com.cchat.receive_service.repos.ConversationRepository;

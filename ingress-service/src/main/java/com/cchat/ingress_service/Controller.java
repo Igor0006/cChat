@@ -3,6 +3,7 @@ package com.cchat.ingress_service;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cchat.ingress_service.model.MessageDto;
+import com.cchat.ingress_service.services.SenderService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

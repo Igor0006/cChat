@@ -1,4 +1,4 @@
-package com.cchat.ingress_service;
+package com.cchat.ingress_service.services;
 
 import java.time.Duration;
 import java.util.Date;

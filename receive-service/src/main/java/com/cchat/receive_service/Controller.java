@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cchat.receive_service.model.Conversation;
 import com.cchat.receive_service.model.Message;
 import com.cchat.receive_service.model.User;
+import com.cchat.receive_service.services.ConversationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
