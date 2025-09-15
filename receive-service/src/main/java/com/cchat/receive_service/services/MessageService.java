@@ -13,7 +13,9 @@ import com.cchat.receive_service.repos.MessageRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -22,6 +24,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ConversationService converstaionService;
     private final ConversationRepository conversationRepository;
+    private final SimpMessagingTemplate messaging;
 
     @KafkaListener(topics = "messages")
     @Transactional
@@ -44,6 +47,14 @@ public class MessageService {
 
         messageRepository.save(m);
         log.info("Saved message id={} conv={} sender={}", m.getId(), conversation.getId(), m.getSender_id());
+
+        var payload = Map.of(
+            "id", m.getId(),
+            "conversationId", m.getConversation_id(),
+            "senderId", m.getSender_id(),
+            "body", m.getBody()
+        );
+        messaging.convertAndSend("/topic/messages", payload);
     }
 
 }
