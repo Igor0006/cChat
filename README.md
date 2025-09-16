@@ -18,8 +18,8 @@ The system is split into two Spring Boot microservices connected via Apache Kafk
         |                                                 Kafka
         |                                                   v
         |                                         +---------+-----------+
-	      | -----------------REST-------------->    |   Receive Service   |
-		    |           (Group management)            |                     |
+		| -----------------REST-------------->    |   Receive Service   |
+		|           (Group management)            |                     |
         |  <----------- REST / WS/STOMP ----------| (Persist & Deliver) |
         |         (Fetch history, subscribe)      +---------+-----------+
         |                                                   |
