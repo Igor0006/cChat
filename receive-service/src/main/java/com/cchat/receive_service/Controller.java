@@ -65,7 +65,7 @@ public class Controller {
     @PreAuthorize("@conversationService.canAccess(#jwt.subject, #conversation_id)")
     @GetMapping("/chat/{conversation_id}")
     public List<Message> getChat(@PathVariable Long conversation_id, @AuthenticationPrincipal Jwt jwt) {
-        return conversationService.getMessages(conversation_id);
+        return conversationService.getMessages(conversation_id, jwt.getSubject());
     }
     
 }

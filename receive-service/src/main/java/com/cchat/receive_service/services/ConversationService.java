@@ -45,7 +45,9 @@ public class ConversationService {
         return conversationRepository.findConversations(userId);
     }
 
-    public List<Message> getMessages(Long conversation_id) {
+    public List<Message> getMessages(Long conversation_id, String username) {
+        // set conversation as read
+        memberRepository.updateChecked(conversation_id, userRepository.findByLogin(username), false);
         return messageRepository.getChatByConversationId(conversation_id);
     }
 

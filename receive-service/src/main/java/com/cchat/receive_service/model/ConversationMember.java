@@ -18,5 +18,7 @@ public class ConversationMember {
     Conversation conversation;
     @ManyToOne
     User user;
+
+    boolean checked = true;
 }
     
