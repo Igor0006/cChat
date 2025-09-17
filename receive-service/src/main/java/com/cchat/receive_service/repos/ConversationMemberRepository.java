@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.cchat.receive_service.model.ConversationMember;
 
-import jakarta.transaction.Transactional;
 
 @Repository
 public interface ConversationMemberRepository extends JpaRepository<ConversationMember, Long> {
@@ -14,13 +13,21 @@ public interface ConversationMemberRepository extends JpaRepository<Conversation
     @Modifying
     void deleteByConversation_IdAndUser_Id(Long conversationId, Long userId);
     @Modifying
-    @Transactional
     @Query("""
-       update ConversationMember cm
-       set cm.checked = :checked
-       where cm.conversation.id = :conversationId
-         and cm.user.id = :userId
-       """)
-    void updateChecked(Long conversationId, Long userId, boolean checked);
+        update ConversationMember cm
+        set cm.unread = true
+        where cm.conversation.id = :conversationId
+        and cm.user.id <> :senderId
+        """)
+    void markUnreadForOthers(Long conversationId, Long senderId);
+
+    @Modifying
+    @Query("""
+        update ConversationMember cm
+        set cm.unread = false
+        where cm.conversation.id = :conversationId
+        and cm.user.id = :userId
+    """)
+    void markReadForUser(Long conversationId, Long userId);
 }
 

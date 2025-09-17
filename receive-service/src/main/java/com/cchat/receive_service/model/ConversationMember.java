@@ -19,6 +19,6 @@ public class ConversationMember {
     @ManyToOne
     User user;
 
-    boolean checked = true;
+    boolean unread = false;
 }
     

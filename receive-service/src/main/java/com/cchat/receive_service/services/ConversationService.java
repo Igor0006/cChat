@@ -47,7 +47,7 @@ public class ConversationService {
 
     public List<Message> getMessages(Long conversation_id, String username) {
         // set conversation as read
-        memberRepository.updateChecked(conversation_id, userRepository.findByLogin(username), false);
+        memberRepository.markReadForUser(conversation_id, userRepository.findByLogin(username));
         return messageRepository.getChatByConversationId(conversation_id);
     }
 
