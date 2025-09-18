@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import com.cchat.receive_service.model.Conversation;
 import com.cchat.receive_service.model.Message;
 import com.cchat.receive_service.model.MessageDto;
+import com.cchat.receive_service.model.User;
 import com.cchat.receive_service.repos.ConversationMemberRepository;
 import com.cchat.receive_service.repos.ConversationRepository;
 import com.cchat.receive_service.repos.MessageRepository;
-
+import com.cchat.receive_service.repos.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
+
+    private final UserRepository userRepository;
     private final MessageRepository messageRepository;
     private final ConversationService converstaionService;
     private final ConversationRepository conversationRepository;
@@ -61,7 +64,12 @@ public class MessageService {
             "senderId", m.getSender_id(),
             "body", m.getBody()
         );
-        messaging.convertAndSend("/topic/messages", payload);
+        User receiver = userRepository
+                            .findById(destinationId)
+                            .orElseThrow(() -> new IllegalArgumentException("User not found for id: " + destinationId));
+
+        messaging.convertAndSend("/topic/ping", Map.of("ok", true));
+        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages", payload);
     }
 
 }
