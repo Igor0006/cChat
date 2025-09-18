@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -42,7 +43,18 @@ public class ConversationService {
     }
     public List<Conversation> getConverstions(String login) {
         Long userId = userRepository.findByLogin(login);
-        return conversationRepository.findConversations(userId);
+        List<Conversation> list = conversationRepository.findConversations(userId);
+        for (var conv: list) {
+            if (conv.getType().isDm()) {
+                if (conv.getType().isDm()) {
+                    String receiverLogin = memberRepository
+                            .findOtherUserLogin(conv.getId(), userId)
+                            .orElse(login); // fallback just in case
+                    conv.setTitle(receiverLogin);
+                }
+            }
+        }
+        return list;
     }
 
     public List<Message> getMessages(Long conversation_id, String username) {

@@ -1,5 +1,7 @@
 package com.cchat.receive_service.repos;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +31,14 @@ public interface ConversationMemberRepository extends JpaRepository<Conversation
         and cm.user.id = :userId
     """)
     void markReadForUser(Long conversationId, Long userId);
+
+    @Query("""
+        select u.login
+        from ConversationMember cm
+        join cm.user u
+        where cm.conversation.id = :conversationId
+          and u.id <> :userId
+    """)
+    Optional<String> findOtherUserLogin(Long conversationId, Long userId);
 }
 
