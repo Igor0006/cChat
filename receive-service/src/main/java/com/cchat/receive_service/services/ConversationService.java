@@ -57,6 +57,7 @@ public class ConversationService {
         return list;
     }
 
+    @Transactional
     public List<Message> getMessages(Long conversation_id, String username) {
         // set conversation as read
         memberRepository.markReadForUser(conversation_id, userRepository.findByLogin(username));
