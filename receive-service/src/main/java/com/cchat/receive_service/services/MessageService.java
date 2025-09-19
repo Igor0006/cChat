@@ -55,7 +55,7 @@ public class MessageService {
         log.info("Saved message id={} conv={} sender={}", m.getId(), conversation.getId(), m.getSender_id());
 
         // set conversation unread for recievers
-        conversationMemberRepository.markReadForUser(conversation.getId(), senderId);
+        conversationMemberRepository.markUnreadForOthers(conversation.getId(), senderId);
 
         // raw sender to client via stomp
         var payload = Map.of(
