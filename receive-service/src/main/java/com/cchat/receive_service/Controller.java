@@ -3,6 +3,7 @@ package com.cchat.receive_service;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cchat.receive_service.model.Conversation;
+import com.cchat.receive_service.model.ConversationDto;
 import com.cchat.receive_service.model.Message;
 import com.cchat.receive_service.services.ConversationService;
 
@@ -58,7 +59,7 @@ public class Controller {
     }
     
     @GetMapping("/conversations")
-    public List<Conversation> getConversations(@AuthenticationPrincipal Jwt jwt) {
+    public List<ConversationDto> getConversations(@AuthenticationPrincipal Jwt jwt) {
         return conversationService.getConverstions(jwt.getSubject());
     }
 

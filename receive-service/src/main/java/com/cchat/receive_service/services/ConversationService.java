@@ -11,10 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,9 +41,11 @@ public class ConversationService {
         log.info("Access of user {} for conversation {} edit was denied", login, conversationId);
         return false;
     }
-    public List<Conversation> getConverstions(String login) {
+
+    public List<ConversationDto> getConverstions(String login) {
         Long userId = userRepository.findByLogin(login);
         List<Conversation> list = conversationRepository.findConversations(userId);
+        List<ConversationDto> dtoList = new ArrayList<>();
         for (var conv: list) {
             if (conv.getType().isDm()) {
                 if (conv.getType().isDm()) {
@@ -53,8 +55,9 @@ public class ConversationService {
                     conv.setTitle(receiverLogin);
                 }
             }
+            dtoList.add(new ConversationDto(conv.getTitle(), conv.getId(), memberRepository.isUnread(conv.getId(), userId)));
         }
-        return list;
+        return dtoList;
     }
 
     @Transactional
