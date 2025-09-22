@@ -10,13 +10,18 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.cchat.ingress_service.UserRepo;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
+    private final UserRepo userRepo;
 
     @Value("${security.key}")
     private String secret;
@@ -32,6 +37,7 @@ public class JwtService {
         Date exp = new Date(now.getTime() + ttl.toMillis());
 
         Map<String, Object> claims = new HashMap<>();
+        claims.put("uid", userRepo.findIdByLogin(login));
 
         return Jwts.builder()
                 .claims(claims)
