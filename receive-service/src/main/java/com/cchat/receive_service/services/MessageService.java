@@ -39,12 +39,16 @@ public class MessageService {
         Long destinationId = message.getDestinationId();
 
         Conversation conversation;
-        if (message.getType().isDm()) {
-            conversation = converstaionService.getConversationForDm(senderId, destinationId);
-        } else {
-            conversation = conversationRepository.findById(destinationId)
-                .orElseThrow(() -> new IllegalArgumentException("Conversation not found for id: " + destinationId));
-        }
+        conversation = conversationRepository.findById(destinationId)
+            .orElseThrow(() -> new IllegalArgumentException("Conversation not found for id: " + destinationId));
+            
+        // if (message.getType().isDm()) {
+        //     conversation = converstaionService.getConversationForDm(senderId, destinationId);
+        // } else {
+        //     conversation = conversationRepository.findById(destinationId)
+        //         .orElseThrow(() -> new IllegalArgumentException("Conversation not found for id: " + destinationId));
+        // }
+        
         // save message in db
         Message m = new Message();
         m.setConversation_id(conversation.getId());
