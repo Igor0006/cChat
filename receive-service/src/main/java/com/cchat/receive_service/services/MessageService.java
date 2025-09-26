@@ -73,6 +73,7 @@ public class MessageService {
                             .orElseThrow(() -> new IllegalArgumentException("User not found for id: " + destinationId));
 
         messaging.convertAndSend("/topic/ping", Map.of("ok", true));
+        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/update", payload);
         messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages" + conversation.getId(), payload);
     }
 
