@@ -51,7 +51,11 @@ public class Controller {
         conversationService.removeMember(memberDto.conversationId, memberDto.userId);
     }
     
-
+    @PostMapping("/addContact")
+    public void addContact(@RequestBody String contactUsername, @AuthenticationPrincipal Jwt jwt) {
+        conversationService.getConversationForDm(jwt.getSubject(), contactUsername);
+    }
+    
     @GetMapping("/me")
     public String getMe(@AuthenticationPrincipal Jwt jwt) {
         String username = jwt.getSubject();

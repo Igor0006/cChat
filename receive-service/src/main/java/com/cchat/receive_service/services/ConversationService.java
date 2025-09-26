@@ -68,7 +68,10 @@ public class ConversationService {
     }
 
     @Transactional
-    public Conversation getConversationForDm(Long userAId, Long userBId) {
+    public Conversation getConversationForDm(String user, String contact) {
+        Long userAId = userRepository.findByLogin(user);
+        Long userBId = userRepository.findByLogin(contact);
+
         var existingId = conversationRepository.findDmConversationId(userAId, userBId);
         if (existingId.isPresent()) {
             return conversationRepository.getReferenceById(existingId.get());
