@@ -12,7 +12,6 @@ import com.cchat.receive_service.model.User;
 import com.cchat.receive_service.repos.ConversationMemberRepository;
 import com.cchat.receive_service.repos.ConversationRepository;
 import com.cchat.receive_service.repos.MessageRepository;
-import com.cchat.receive_service.repos.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageService {
 
-    private final UserRepository userRepository;
     private final MessageRepository messageRepository;
-    private final ConversationService converstaionService;
     private final ConversationRepository conversationRepository;
     private final ConversationMemberRepository conversationMemberRepository;
     private final SimpMessagingTemplate messaging;
@@ -42,13 +39,6 @@ public class MessageService {
         conversation = conversationRepository.findById(destinationId)
             .orElseThrow(() -> new IllegalArgumentException("Conversation not found for id: " + destinationId));
             
-        // if (message.getType().isDm()) {
-        //     conversation = converstaionService.getConversationForDm(senderId, destinationId);
-        // } else {
-        //     conversation = conversationRepository.findById(destinationId)
-        //         .orElseThrow(() -> new IllegalArgumentException("Conversation not found for id: " + destinationId));
-        // }
-        
         // save message in db
         Message m = new Message();
         m.setConversation_id(conversation.getId());
@@ -68,13 +58,14 @@ public class MessageService {
             "senderId", m.getSender_id(),
             "body", m.getBody()
         );
-        User receiver = userRepository
-                            .findById(destinationId)
-                            .orElseThrow(() -> new IllegalArgumentException("User not found for id: " + destinationId));
-
+        
         messaging.convertAndSend("/topic/ping", Map.of("ok", true));
+        
+        for (User receiver: conversationMemberRepository.findOtherUserOfConversationIds(destinationId, senderId)) {
+         log.info("toUser={}", receiver.getLogin());
         messaging.convertAndSendToUser(receiver.getLogin(), "/queue/update", payload);
-        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages" + conversation.getId(), payload);
+        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages" + conversation.getId(), payload);   
+        }
     }
 
 }
