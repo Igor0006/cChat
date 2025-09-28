@@ -32,8 +32,8 @@ public class MessageService {
     @Transactional
     public void recieveMessage(ConsumerRecord<String, MessageDto> record) {
         MessageDto message = record.value();
-        Long senderId = message.getSenderId();
-        Long destinationId = message.getDestinationId();
+        Long senderId = message.getSender_id();
+        Long destinationId = message.getConversation_id();
 
         Conversation conversation;
         conversation = conversationRepository.findById(destinationId)
@@ -54,9 +54,10 @@ public class MessageService {
         // raw sender to client via stomp
         var payload = Map.of(
             "id", m.getId(),
-            "conversationId", m.getConversation_id(),
-            "senderId", m.getSender_id(),
-            "body", m.getBody()
+            "conversation_id", m.getConversation_id(),
+            "sender_id", m.getSender_id(),
+            "body", m.getBody(),
+            "createdAt", m.getCreatedAt()
         );
         
         messaging.convertAndSend("/topic/ping", Map.of("ok", true));

@@ -15,7 +15,7 @@ public class SenderService {
     private final KafkaTemplate<String, MessageDto> kafkaTemplate;
 
     public void sendMessage(MessageDto message) {
-        log.info("Message from {} was sent to {}", message.getSenderId(), message.getDestinationId());
-        kafkaTemplate.send("messages", Long.toString(message.getDestinationId()), message);
+        log.info("Message from {} was sent to {}", message.getSender_id(), message.getConversation_id());
+        kafkaTemplate.send("messages", Long.toString(message.getConversation_id()), message);
     }
 }
