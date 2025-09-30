@@ -2,7 +2,6 @@ package com.cchat.receive_service;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cchat.receive_service.model.Conversation;
 import com.cchat.receive_service.model.ConversationDto;
 import com.cchat.receive_service.model.Message;
 import com.cchat.receive_service.services.ConversationService;

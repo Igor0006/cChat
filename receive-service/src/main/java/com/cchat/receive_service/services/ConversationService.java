@@ -133,4 +133,8 @@ public class ConversationService {
     public void removeMember(Long conversationId, Long userId) {
         memberRepository.deleteByConversation_IdAndUser_Id(conversationId, userId);
     }
+    
+    public void markAsRead(Long conversationId, String login) {
+        memberRepository.markReadForUser(conversationId, userRepository.findByLogin(login));
+    }
 }

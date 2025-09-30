@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.cchat.receive_service.model.ConversationMember;
 import com.cchat.receive_service.model.User;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 
@@ -28,6 +30,7 @@ public interface ConversationMemberRepository extends JpaRepository<Conversation
     void markUnreadForOthers(Long conversationId, Long senderId);
 
     @Modifying
+    @Transactional
     @Query("""
         update ConversationMember cm
         set cm.unread = false

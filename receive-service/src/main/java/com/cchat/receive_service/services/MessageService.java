@@ -53,7 +53,6 @@ public class MessageService {
 
         // raw sender to client via stomp
         var payload = Map.of(
-            "id", m.getId(),
             "conversation_id", m.getConversation_id(),
             "sender_id", m.getSender_id(),
             "body", m.getBody(),
@@ -63,9 +62,9 @@ public class MessageService {
         messaging.convertAndSend("/topic/ping", Map.of("ok", true));
         
         for (User receiver: conversationMemberRepository.findOtherUserOfConversationIds(destinationId, senderId)) {
-         log.info("toUser={}", receiver.getLogin());
-        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/update", payload);
-        messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages" + conversation.getId(), payload);   
+            log.info("toUser={}", receiver.getLogin());
+            messaging.convertAndSendToUser(receiver.getLogin(), "/queue/update", payload);
+            messaging.convertAndSendToUser(receiver.getLogin(), "/queue/messages" + conversation.getId(), payload);   
         }
     }
 
