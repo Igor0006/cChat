@@ -30,7 +30,7 @@ public class Controller {
     private final ConversationService conversationService;
     
     @PostMapping("/createGroup/{groupName}")
-    public void createGroup(@PathVariable String groupName, @RequestBody List<Long> userIds, @AuthenticationPrincipal Jwt jwt) {        
+    public void createGroup(@PathVariable String groupName, @RequestBody List<String> userIds, @AuthenticationPrincipal Jwt jwt) {        
         conversationService.createGroup(groupName, userIds, jwt.getSubject());
     }
 
